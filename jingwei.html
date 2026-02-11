@@ -1,0 +1,37 @@
+<!-- jingwei.html -->
+<button id="locateBtn">获取我的位置</button>
+
+<script>
+document.getElementById('locateBtn').addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    alert("您的浏览器不支持定位");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude, accuracy } = position.coords;
+      console.log(`精确位置: ${longitude}, ${latitude}（精度: ${accuracy} 米）`);
+      searchNearbyRestaurants(longitude, latitude);
+    },
+    (error) => {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("请允许位置权限");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("位置服务未开启");
+          break;
+        case error.TIMEOUT:
+          alert("定位超时，请重试");
+          break;
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 30000
+    }
+  );
+});
+</script>
